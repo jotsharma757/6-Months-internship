@@ -4,60 +4,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML elements-- add, delete, update</title>
+    <title>BASics of Calculator</title>
 </head>
 
 <body>
-    <input type="text" id="input" placeholder="Enter text">
-    <button id="addBtn">Add</button>
-    <ul class="li"></ul>
+    <div class="cal">
+        <input type="text" id="text" placeholder="Type....">
+        <div>
+            <button class="operators">AC</button>
+            <button class="operators">%</button>
+            <button class="operators">del</button>
+            <button class="operators">/</button>
+        </div>
 
+        <div>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button class="operators">*</button>
+        </div>
+
+        <div>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button class="operators">-</button>
+        </div>
+        <div>
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button class="operators">+</button>
+        </div>
+
+        <div></div>
+        <button class="operators">=</button>
+        <button class="operators">.</button>
+        <button class="operators">0</button>
+        <button class="operators">00</button>
+    </div>
+    </div>
     <script>
-        const input = document.querySelector("#input");
-        const addBtn = document.querySelector("#addBtn");
-        const list = document.querySelector(".li");
-// input.style.backgroundColor="blue";
-        function addItem() {
-            input.style.backgroundColor="red";
-            //add item
-            if (input.value === "") return;
-            const li = document.createElement("li");
-            const span = document.createElement("span");
-            span.textContent = input.value;
-            span.addEventListener("click", () => {
-                span.style.textDecoration = "line-through";
-                span.style.color = "blue";
-            });
-            li.appendChild(span);
-            list.appendChild(li);
-            input.value = "";
+        const cal = document.querySelector('.cal');
+        const text = document.querySelector("#text");
+        let num1 = "";
+        let num2 = "";
+        let operator = "";
 
-            //delete 
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "delete";
-            deleteButton.addEventListener("click", () => {
-                deleteItem(deleteButton);
-            });
-            //edit
-            const editButton = document.createElement("button");
-            editButton.textContent = "edit";
-            editButton.addEventListener("click", () => {
-                 const newText = prompt("Edit item", span.textContent);
-                if (newText) {
-                    span.textContent = newText;
+        cal.addEventListener("click", (e) => {
+            
+            if (e.target.tagName != "BUTTON") return;
+            const value = e.target.innerText; //
+
+            if (value === "AC") {
+                num1 = "";
+                num2 = "";
+                operator = "";
+                text.value = "";
+                return; //
+            } else if (value === "del") {
+                if (operator === "") {
+                    num1 = num1.slice(0, -1);
+                    text.value = num1;
+                } else {
+                    num2 = num2.slice(0, -1);
+                    text.value = num2;
+                }
+            } else if (value === "+" || value === "-" || value === "*" || value === "/" || value === "%") {
+                operator = value;
+                text.value = num1 + operator;
+
+
+            } else if (value === "=") {
+                let number1 = Number(num1);
+                let number2 = Number(num2);
+                let result;
+                switch (operator) {
+                    case "+":
+                        result = number1 + number2;
+                        break;
+                    case "-":
+                        result = number1 - number2;
+                        break;
+                    case "*":
+                        result = number1 * number2;
+                        break;
+                    case "/":
+                        result = number1 / number2;
+                        break;
+                    case "%":
+                        result = number1 % number2;
+                        break;
+                    default:
+                        result = "Invalid operator";
+                }
+                text.value = result;
+                num1 = result.toString();
+                num2 = "";
+            } else {
+                if (operator === "") {
+                    num1 += value;
+                    text.value = num1;
+                } else {
+                    num2 += value;
+                    text.value = text.value + num2;
 
                 }
-            });
-            li.appendChild(deleteButton);
-            li.appendChild(editButton);
-        }
-        //add item
-        addBtn.addEventListener("click", addItem);
-        //delete item
-        function deleteItem(button) {
-            const li = button.parentElement;
-            list.removeChild(li);
-        }
+            }
+            console.log(num1,num2,operator);
+
+        });
     </script>
 </body>
 

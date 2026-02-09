@@ -4,60 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Number Guessing Game</title>
 </head>
 
 <body>
-    <input type="text" name="" id="text" placeholder="Enter the Text">
-    <button id="add">Add</button>
-    <ul class="list"></ul>
+    <h1>Number Guessing Game</h1>
+    <input type="text" name="" id="guess" placeholder="Guess the Number">
+    <button class="btn">Check the Number</button>
+    <p id="message"></p>
+    <p> score <span id="score">5</span></p>
 
+    <!-----JAVASCRIPT----->
     <script>
-        const text = document.querySelector("#text");
-        const add = document.querySelector("#add");
-        const list = document.querySelector(".list");
+        const guess = document.querySelector("#guess");
+        const btn = document.querySelector(".btn");
+        const message = document.querySelector("#message");
+        const score = document.querySelector("#score");
 
-        function addItem() {
-            //add item
-            if (text.value === "") return;
-            const li = document.createElement("li");
+        let randomNum = Math.floor(Math.random() * 10) + 1;
+        console.log(randomNum); // guessing number
+        let lives = 5;
 
-            const span = document.createElement("span");
-            span.textContent = text.value;
-
-            span.addEventListener("click", () => {
-                span.style.textDecoration = "line-through";
-            });
-            li.appendChild(span);
-            list.appendChild(li);
-            text.value = " ";
-            //delete 
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "delete";
-            deleteButton.addEventListener("click", () => {
-                deleteItem(deleteButton);
-            });
-            // edit
-            const editButton = document.createElement("button");
-            editButton.textContent = "edit";
-            editButton.addEventListener("click", () => {
-                const newText = prompt("Edit item", span.textContent);
-                if (newText) {
-                    span.textContent = newText;
-                }
-
-            });
-
-            li.appendChild(deleteButton);
-            li.appendChild(editButton);
+        btn.addEventListener("click", () => {
+            const userGuess = Number(guess.value);
+            if (!userGuess){
+               message .innerText = "Please enter a number between 1 and 10";
+               return;
             }
-        add.addEventListener("click", addItem);
-        function deleteItem(button) {
-            const li = button.parentElement;
-            list.removeChild(li);
+            
+            if (userGuess === randomNum) {
+                message.innerText = "congratualation! you guessed the number";
+            }
+            else {
+                lives--;
+            
+            
+     if (lives === 0){
+                message.innerText = "Game Over! You have used all your chances";
+                btn.disabled = true;
+            }
+    else if (userGuess < randomNum) {
+                message.innerHTML = "Score is Low";
+            }
+            else if (userGuess > randomNum) {
+                message.innerHTML = "Score is High";
+            }
+            else {
+                message.innerHTML = "Invalid Input! Please enter a number between 1 and 10";
+            }
+           
+            score.innerText = lives;
         }
+            guess.value = "";
+        });
 
     </script>
+
 </body>
 
 </html>
