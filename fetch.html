@@ -13,43 +13,35 @@
     <button id="deleteBtn">Delete</button>
     <button id="post">Post</button>
     <button id="update">UPDATE</button>
-    <ul id="lists"></ul>
+    <ul id="op"></ul>
     <script>
         const btn = document.querySelector("#btn");
-        const lists = document.querySelector("#lists");
+        const op = document.querySelector("#op");
         const deleteBtn = document.querySelector("#deleteBtn");
         const post = document.querySelector("#post");
         const update = document.querySelector("#update");
 
         //Load the data
-        btn.addEventListener("click", () => {
-            fetch("https://jsonplaceholder.typicode.com/users")
+        btn.addEventListener("click", async () => {
+            const res = await fetch("https://dog.ceo/api/breeds/image/random")
+            const data = await res.json();
 
-                .then(res => res.json())
-                .then(data => {
-                    lists.innerHTML = "";
-                    data.slice(0, 10).forEach(post => {
-                        const li = document.createElement("li");
-                        li.innerText = post.name;
-                        lists.appendChild(li);
-                    });
-                });
+            const img = document.createElement("img")
+            img.src = data.message;
+            img.width = 200;
+            op.appendChild(img)
         });
         //Delete ythe data
         deleteBtn.addEventListener("click", () => {
-            fetch("https://jsonplaceholder.typicode.com/users/1", {
-                method: "DELETE"
-            })
-                .then(() => {
-                    if (lists.firstChild) {
-                        lists.removeChild(lists.firstChild);
-                    }
-                });
-        });
+            if (op.firstChild) {
+                op.removeChild(op.firstChild);
+            }
+        })
         //post the data
         post.addEventListener("click", () => {
-            fetch("https://jsonplaceholder.typicode.com/users", {
+            fetch("https://dog.ceo/api/breeds/image/random", {
                 method: "POST",
+
                 headers: {
                     "content-type": "application/JSON"
                 },
@@ -61,12 +53,11 @@
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    
-                    const li = document.createElement("li");
-                    li.innerText = data.Title;
-                    console.log(li);
-                    
-                    lists.appendChild(li);
+
+                    const img = document.createElement("img")
+                    img.src = data.message;
+                    img.width = 200;
+                    op.appendChild(img)
                 });
         });
         //update the data
@@ -79,14 +70,15 @@
 
                 body: JSON.stringify({
                     Title: "Update User",
-                    
+
                 })
             })
                 .then(res => res.json())
                 .then(data => {
-                    const li = document.createElement("li");
-                    li.innerText = data.Title;
-                    lists.appendChild(li);
+                    const img = document.createElement("img")
+                    img.src = data.message;
+                    img.width = 200;
+                    op.appendChild(img)
                 });
         });
 
